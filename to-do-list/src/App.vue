@@ -3,14 +3,18 @@
 <div class="app">
   <h2 class="title">To-Do List</h2>
   <div class="to-do">
-    <p>{{ todos.todo }}</p>
     <input class="input-text" v-model="todos.todo" type="text"  placeholder="type text">
     <button class="button-add" @click="addToDo(todos.id++)">add</button>
     <button class="button-delete-all" @click="deleteToDo">delete all</button>
-    <div v-for="(element) in todos.todoList" :key="element.id">
+    <p>список задач: {{ todos.todoList.length }}</p>
+    <hr color="black">
+    <div v-for="(element,i) in todos.todoList" :key="element.id">
       <p>
-        <span class="todo-id">{{ element.id + ") "}}</span>
-        <span class="todo-text" :class="{todo_text_isShow : element.isComplete}">{{ element.text }}</span>
+        <span class="todo-id">{{ i+1 + ") "}}</span>
+        <span class="todo-text" 
+        :class="{todo_text_isShow : element.isComplete}"
+        @dblclick="removeItem(i)"
+        >{{ element.text }}</span>
         <input type="checkbox" v-model="element.isComplete">
       </p>  
     </div>
@@ -40,6 +44,10 @@ const addToDo = () => {
 const deleteToDo = () => {
   todos.value.todoList = [];
   todos.value.id = 0;
+}
+const removeItem = (index) => {
+  console.log(index);
+  todos.value.todoList.splice(index,1)
 }
 </script>
 
