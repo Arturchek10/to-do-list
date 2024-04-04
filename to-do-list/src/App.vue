@@ -3,15 +3,15 @@
 <div class="app">
   <h2 class="title">To-Do List</h2>
   <div class="to-do">
-    <p>{{ todo }}</p>
-    <input class="input-text" v-model="todo" type="text"  placeholder="type text">
-    <button class="button-add" @click="addToDo(id++)">add</button>
+    <p>{{ todos.todo }}</p>
+    <input class="input-text" v-model="todos.todo" type="text"  placeholder="type text">
+    <button class="button-add" @click="addToDo(todos.id++)">add</button>
     <button class="button-delete-all" @click="deleteToDo">delete all</button>
-    <div v-for="(element, index) in todoList" :key="index">
+    <div v-for="(element) in todos.todoList" :key="element.id">
       <p>
-        <span class="todo-id">{{ ++index + ") "}}</span>
-        <span class="todo-text" :class="{todo_text_isShow : isDone}">{{ element }}</span>
-        <input type="checkbox" v-model="isDone">
+        <span class="todo-id">{{ element.id + ") "}}</span>
+        <span class="todo-text" :class="{todo_text_isShow : element.isComplete}">{{ element.text }}</span>
+        <input type="checkbox" v-model="element.isComplete">
       </p>  
     </div>
   </div>
@@ -22,20 +22,24 @@
 <script setup>
 import {ref} from "vue"
 
-const todo = ref('');
-const todoList = ref([]);
-const isDone = ref(false);
-const id = ref(0);
+const todos = ref({
+  todo: '',
+  todoList: [],
+  isDone: false,
+  id: 0,
+});
+
 const addToDo = () => {
-  if(todo.value.trim() !== ''){
-    todoList.value.push(todo.value)
-    todo.value = ''
-  } else {
-    alert('пожалуйста введите текст');
-  }
+  todos.value.todoList.push({
+    id: todos.value.id,
+    text: todos.value.todo,
+    isComplete: todos.value.isDone,
+  });
+  todos.value.todo = '';
 }
 const deleteToDo = () => {
-  todoList.value = [];     
+  todos.value.todoList = [];
+  todos.value.id = 0;
 }
 </script>
 
