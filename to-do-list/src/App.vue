@@ -3,7 +3,7 @@
 <div class="app">
   <h2 class="title">To-Do List</h2>
   <div class="to-do">
-    <input class="input-text" v-model="todos.todo" type="text"  placeholder="type text">
+    <input class="input-text" :class="{red_is_active : todos.redActive}" v-model="todos.todo" type="text"  placeholder="type text">
     <button class="button-add" @click="addToDo(todos.id++)">add</button>
     <button class="button-delete-all" @click="deleteToDo">delete all</button>
     <p>список задач: {{ todos.todoList.length }}</p>
@@ -31,15 +31,23 @@ const todos = ref({
   todoList: [],
   isDone: false,
   id: 0,
+  redActive: false,
 });
 
 const addToDo = () => {
-  todos.value.todoList.push({
-    id: todos.value.id,
-    text: todos.value.todo,
-    isComplete: todos.value.isDone,
-  });
-  todos.value.todo = '';
+  if (todos.value.todo.trim() !== ''){
+    todos.value.redActive = false;
+    todos.value.todoList.push({
+      id: todos.value.id,
+      text: todos.value.todo,
+      isComplete: todos.value.isDone,
+    });
+    todos.value.todo = '';
+  } else {
+    todos.value.redActive = true;
+    todos.value.todo = '';
+    
+  }
 }
 const deleteToDo = () => {
   todos.value.todoList = [];
@@ -71,6 +79,12 @@ const removeItem = (index) => {
 .input-text{
   width:250px;
   height: 20px;
+
+}
+.red_is_active{
+  border-color: red;
+  transition: 0.5s;
+  
 }
 .input-text:checked + span{
   text-decoration: line-through;
